@@ -9,9 +9,15 @@ const CustomFormControl = styled(FormControl)(() => ({
     left: 0,
     '&[data-shrink="false"]': {
       top: 5
+    },
+    '&[data-shrink="true"]': {
+      top: 26
     }
   },
   '& > div > input': {
+    padding: '30.5px 14px 11.5px !important'
+  },
+  '& .MuiSelect-select': {
     padding: '30.5px 14px 11.5px !important'
   },
   '& legend': {

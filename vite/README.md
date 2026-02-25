@@ -1,75 +1,58 @@
-# Getting Started with Create React App
+# LeaveEase - React Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A responsive leave management dashboard built with React 19, Vite 7, and Material UI 7, based on the Berry Free React Admin Template. Connects to the LeaveEase Spring Boot backend for JWT authentication and role-based leave management.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- JWT-based login and registration with role selection (Employee / Admin)
+- Employee dashboard: submit leave requests and view personal leave history
+- Admin dashboard: view all leave requests with summary statistics, approve or reject pending requests
+- Protected routes that redirect unauthenticated users to the login page
+- Axios interceptors for automatic JWT token attachment and global 401 handling
+- Responsive Material UI components with loading indicators and toast notifications
 
-### `Yarn`
+## Tech Stack
 
-Install packages
+- React 19 with Vite 7
+- Material UI (MUI) 7
+- Berry Free React Admin Template
+- Axios with JWT interceptors
+- React Router 7
+- jwt-decode
+- Framer Motion
 
-### `Yarn start`
+## Getting Started
 
-Runs the app in the development mode.\
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js 18+
+- npm or yarn
+- The backend API running at `http://localhost:8080` (see [leaveease-api](https://github.com/Jenkinson16/leaveease-api))
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Install and Run
 
-### `yarn test`
+```bash
+npm install
+npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The app starts at `http://localhost:3000`.
 
-### `yarn build`
+### Environment Variables
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Configure in `.env`:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Variable | Description |
+|----------|-------------|
+| `VITE_API_BASE_URL` | Backend API base URL (default: `http://localhost:8080/api`) |
+| `VITE_APP_BASE_NAME` | Base path for the app (default: `/`) |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Related Repository
 
-### `yarn eject`
+The Spring Boot backend API for this project is maintained in a separate repository:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Backend**: [Jenkinson16/leaveease-api](https://github.com/Jenkinson16/leaveease-api)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## License
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License.

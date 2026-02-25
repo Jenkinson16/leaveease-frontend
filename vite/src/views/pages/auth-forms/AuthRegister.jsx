@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -19,80 +20,97 @@ import Box from '@mui/material/Box';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import CustomFormControl from 'ui-component/extended/Form/CustomFormControl';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
+import axiosInstance from 'utils/axios';
+import useAuth from 'contexts/AuthContext';
 
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-// ===========================|| JWT - REGISTER ||=========================== //
-
 export default function AuthRegister() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('EMPLOYEE');
   const [showPassword, setShowPassword] = useState(false);
-  const [checked, setChecked] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const [strength, setStrength] = useState(0);
   const [level, setLevel] = useState();
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const changePassword = (value) => {
-    const temp = strengthIndicator(value);
-    setStrength(temp);
-    setLevel(strengthColor(temp));
-  };
-
   useEffect(() => {
-    changePassword('123456');
-  }, []);
+    if (password) {
+      const temp = strengthIndicator(password);
+      setStrength(temp);
+      setLevel(strengthColor(temp));
+    } else {
+      setStrength(0);
+    }
+  }, [password]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    if (!username.trim() || !email.trim() || !password) {
+      setError('All fields are required');
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await axiosInstance.post('/auth/register', {
+        username: username.trim(),
+        email: email.trim(),
+        password,
+        role
+      });
+      login(res.data.token, res.data.username, res.data.role);
+      navigate('/leaves', { replace: true });
+    } catch (err) {
+      const msg = err.response?.data?.error || err.response?.data?.message || 'Registration failed';
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <>
+    <form noValidate onSubmit={handleSubmit}>
       <Stack sx={{ mb: 2, alignItems: 'center' }}>
-        <Typography variant="subtitle1">Sign up with Email address </Typography>
+        <Typography variant="subtitle1">Sign up with your details</Typography>
       </Stack>
 
-      <Grid container spacing={{ xs: 0, sm: 2 }}>
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <CustomFormControl fullWidth>
-            <InputLabel htmlFor="outlined-adornment-first-register">First Name</InputLabel>
-            <OutlinedInput id="outlined-adornment-first-register" type="text" name="firstName" value="Jhones" />
-          </CustomFormControl>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <CustomFormControl fullWidth>
-            <InputLabel htmlFor="outlined-adornment-last-register">Last Name</InputLabel>
-            <OutlinedInput id="outlined-adornment-last-register" type="text" name="lastName" value="Doe" />
-          </CustomFormControl>
-        </Grid>
-      </Grid>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
       <CustomFormControl fullWidth>
-        <InputLabel htmlFor="outlined-adornment-email-register">Email Address / Username</InputLabel>
-        <OutlinedInput id="outlined-adornment-email-register" type="email" value="jones@doe.com" name="email" />
+        <InputLabel htmlFor="register-username">Username</InputLabel>
+        <OutlinedInput id="register-username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} name="username" />
       </CustomFormControl>
 
       <CustomFormControl fullWidth>
-        <InputLabel htmlFor="outlined-adornment-password-register">Password</InputLabel>
+        <InputLabel htmlFor="register-email">Email Address</InputLabel>
+        <OutlinedInput id="register-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="email" />
+      </CustomFormControl>
+
+      <CustomFormControl fullWidth>
+        <InputLabel htmlFor="register-password">Password</InputLabel>
         <OutlinedInput
-          id="outlined-adornment-password-register"
+          id="register-password"
           type={showPassword ? 'text' : 'password'}
-          value="Jhones@123"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           name="password"
           label="Password"
           endAdornment={
             <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                edge="end"
-                size="large"
-              >
+              <IconButton onClick={() => setShowPassword(!showPassword)} onMouseDown={(e) => e.preventDefault()} edge="end" size="large">
                 {showPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
@@ -113,25 +131,21 @@ export default function AuthRegister() {
         </FormControl>
       )}
 
-      <FormControlLabel
-        control={<Checkbox checked={checked} onChange={(event) => setChecked(event.target.checked)} name="checked" color="primary" />}
-        label={
-          <Typography variant="subtitle1">
-            Agree with &nbsp;
-            <Typography variant="subtitle1" component={Link} to="#">
-              Terms & Condition.
-            </Typography>
-          </Typography>
-        }
-      />
+      <CustomFormControl fullWidth>
+        <InputLabel htmlFor="register-role">Role</InputLabel>
+        <Select id="register-role" value={role} label="Role" onChange={(e) => setRole(e.target.value)}>
+          <MenuItem value="EMPLOYEE">Employee</MenuItem>
+          <MenuItem value="ADMIN">Admin</MenuItem>
+        </Select>
+      </CustomFormControl>
 
       <Box sx={{ mt: 2 }}>
         <AnimateButton>
-          <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
-            Sign up
+          <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary" disabled={loading}>
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign Up'}
           </Button>
         </AnimateButton>
       </Box>
-    </>
+    </form>
   );
 }
