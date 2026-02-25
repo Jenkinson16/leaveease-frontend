@@ -83,16 +83,16 @@ Create a `.env` file in `frontend/vite/` or configure these in your deployment p
 ## Screenshots
 
 ### Login Page
-![Login Page](../screenshots/login.png)
+![Login Page](https://raw.githubusercontent.com/Jenkinson16/leaveease-api/main/screenshots/login.png)
 
 ### Registration Page
-![Registration Page](../screenshots/register.png)
+![Registration Page](https://raw.githubusercontent.com/Jenkinson16/leaveease-api/main/screenshots/register.png)
 
 ### Employee Dashboard
-![Employee Dashboard](../screenshots/employee-dashboard.png)
+![Employee Dashboard](https://raw.githubusercontent.com/Jenkinson16/leaveease-api/main/screenshots/employee-dashboard.png)
 
 ### Admin Dashboard
-![Admin Dashboard](../screenshots/admin-dashboard.png)
+![Admin Dashboard](https://raw.githubusercontent.com/Jenkinson16/leaveease-api/main/screenshots/admin-dashboard.png)
 
 ## Deployment
 
